@@ -23,7 +23,7 @@ jobs:
     - name:  Debug SSH Key (temporaire)
       run: echo "$SSH_PUBLIC_KEY" | head -c 100
       env:
-        SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }
+        SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
 
     - name: Terraform Apply
       run: cd terraform && terraform apply -auto-approve -var="ssh_public_key=$SSH_PUBLIC_KEY" -var-file="terraform.tfvars"
