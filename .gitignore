@@ -1,4 +1,28 @@
+# Terraform state
 *.tfstate
 *.tfstate.backup
+
+# Local .terraform directories
 .terraform/
+
+# Sensitive files
+*.tfvars
+*.pem
+*.key
+*.pub
+*.crt
+*.pfx
+*.cer
+azkey*
+id_rsa*
+id_ed25519*
+
+# Terraform lock file (optional to ignore if team-managed)
 .terraform.lock.hcl
+
+# Editor junk
+*.log
+*.swp
+.DS_Store
+Thumbs.db
+.vscode/
