@@ -15,6 +15,12 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
+    - name: Debug env vars
+      run: |
+        echo "CLIENT ID: $ARM_CLIENT_ID"
+        echo "SSH pub (first chars): ${SSH_PUBLIC_KEY:0:30}"
+
+
     - name: Terraform Init
       run: cd terraform && terraform init
 
