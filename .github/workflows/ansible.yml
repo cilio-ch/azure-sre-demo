@@ -11,19 +11,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Docker (on GitHub Actions runner)
-      run: |
-        curl -fsSL https://get.docker.com | sudo bash
-        sudo usermod -aG docker $USER
-
-
     - name: Install Ansible
       run: |
         sudo apt update
         sudo apt install -y ansible sshpass
 
+    - name: Install Azure Ansible Collection
+      run: |
+        ansible-galaxy collection install azure.azcollection
+
+
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook ansible/deploy-monitoring.yml -i ansible/hosts
+        ansible-playbook ansible/playbooks/deploy-monitoring.yml -i ansible/hosts
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"
