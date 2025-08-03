@@ -1,8 +1,7 @@
 name: Terraform Destroy
 
 on:
-  workflow_dispatch:  # permet de déclencher manuellement depuis GitHub
-
+  workflow_dispatch:  
 jobs:
   destroy:
     runs-on: ubuntu-latest
