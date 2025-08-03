@@ -51,7 +51,7 @@ variable "admin_username" {
 }
 
 variable "ssh_public_key" {
-  description = "Path to the SSH public key"
+  description = "SSH public key content"
   type        = string
 }
 
