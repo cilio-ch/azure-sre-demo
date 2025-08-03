@@ -1,0 +1,42 @@
+---
+- name: Deploy Prometheus and Grafana on Azure
+  hosts: localhost
+  vars:
+    prometheus_container:
+      name: prometheus
+      image: prom/prometheus
+      cpu: 1
+      memory: 1.5
+      port: 9090
+
+    grafana_container:
+      name: grafana
+      image: grafana/grafana
+      cpu: 1
+      memory: 1.5
+      port: 3000
+
+  tasks:
+    - name: Create Prometheus container group
+      azure.azcollection.azure_container_instance:
+        resource_group: "azure-sre-lab-rg"
+        name: "{{ prometheus_container.name }}"
+        image: "{{ prometheus_container.image }}"
+        cpu: "{{ prometheus_container.cpu }}"
+        memory: "{{ prometheus_container.memory }}"
+        ports:
+          - "{{ prometheus_container.port }}"
+        os_type: Linux
+        location: "francecentral"
+
+    - name: Create Grafana container group
+      azure.azcollection.azure_container_instance:
+        resource_group: "azure-sre-lab-rg"
+        name: "{{ grafana_container.name }}"
+        image: "{{ grafana_container.image }}"
+        cpu: "{{ grafana_container.cpu }}"
+        memory: "{{ grafana_container.memory }}"
+        ports:
+          - "{{ grafana_container.port }}"
+        os_type: Linux
+        location: "francecentral"

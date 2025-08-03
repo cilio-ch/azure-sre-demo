@@ -1,0 +1,5 @@
+---
+# Add tasks here for reusable logic if needed.
+- name: Placeholder task
+  debug:
+    msg: "Monitoring role loaded"

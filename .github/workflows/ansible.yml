@@ -1,0 +1,29 @@
+name: Ansible Deploy to Azure VM
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ansible:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Docker (on GitHub Actions runner)
+      run: |
+        curl -fsSL https://get.docker.com | sudo bash
+        sudo usermod -aG docker $USER
+
+
+    - name: Install Ansible
+      run: |
+        sudo apt update
+        sudo apt install -y ansible sshpass
+
+    - name: Run Ansible Playbook
+      run: |
+        ansible-playbook ansible/deploy-monitoring.yml -i ansible/hosts
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: "False"
