@@ -5,7 +5,7 @@ subnet_name           = "azure-sre-lab-subnet"
 subnet_address_prefix = "10.0.1.0/24"
 nsg_name              = "azure-sre-lab-nsg"
 vm_name               = "azure-sre-vm"
-admin_username        = "azureuser"
+admin_username        = "cilio-ch"
 ssh_public_key        = "azkey.pub"
 
 tags = {
