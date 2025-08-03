@@ -8,6 +8,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -15,10 +23,10 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
-    - name: Debug env vars
+    - name: 🔍 Print ENV for debug
       run: |
-        echo "CLIENT ID: $ARM_CLIENT_ID"
-        echo "SSH pub (first chars): ${SSH_PUBLIC_KEY:0:30}"
+        env | grep ARM_
+        echo "SSH pub: ${SSH_PUBLIC_KEY:0:30}"
 
 
     - name: Terraform Init
@@ -30,9 +38,4 @@ jobs:
         terraform apply -auto-approve \
         -var-file="terraform.tfvars" \
         -var "ssh_public_key=${SSH_PUBLIC_KEY}"
-      env:
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+      
