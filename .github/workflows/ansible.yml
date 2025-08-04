@@ -11,13 +11,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Ansible & Azure Collection
+    - name: Install Ansible, Azure SDK, and Azure Collection
       run: |
-        sudo apt update
-        sudo apt install -y python3-pip sshpass ansible
-        pip install azure-mgmt-resource azure-mgmt-containerinstance azure-identity msrestazure
+        python3 -m pip install --upgrade pip
+        python3 -m pip install ansible
+        python3 -m pip install \
+          azure-mgmt-resource \
+          azure-mgmt-containerinstance \
+          azure-identity \
+          msrestazure
         ansible-galaxy collection install azure.azcollection
-        echo -e "[defaults]\ncollections_paths = ~/.ansible/collections:/usr/share/ansible/collections\nansible_python_interpreter = /usr/bin/python3" > ansible.cfg
+        echo -e "[defaults]\ncollections_path = ~/.ansible/collections:/usr/share/ansible/collections\nansible_python_interpreter = /usr/bin/python3" > ansible.cfg
+
+    - name: Verify Python & Ansible environment
+      run: |
+        which python3
+        python3 --version
+        ansible --version
+        pip list | grep azure
+
 
     - name: Run Ansible Playbook
       run: |
