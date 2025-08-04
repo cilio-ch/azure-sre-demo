@@ -105,3 +105,57 @@
           - "80:80"
         state: started
         restart_policy: always
+
+    - name: Create Prometheus user
+      become: true
+      user:
+        name: prometheus
+        system: yes
+        shell: /sbin/nologin
+
+    - name: Download Prometheus
+      become: true
+      shell: |
+        cd /tmp
+        curl -LO https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+        tar -xzf prometheus-2.52.0.linux-amd64.tar.gz
+        mv prometheus-2.52.0.linux-amd64 /opt/prometheus
+        ln -s /opt/prometheus/prometheus /usr/local/bin/prometheus
+        ln -s /opt/prometheus/promtool /usr/local/bin/promtool
+
+    - name: Configure Prometheus
+      become: true
+      copy:
+        dest: /opt/prometheus/prometheus.yml
+        content: |
+          global:
+            scrape_interval: 15s
+
+          scrape_configs:
+            - job_name: 'node_exporter'
+              static_configs:
+                - targets: ['localhost:9100']
+
+    - name: Create Prometheus systemd service
+      become: true
+      copy:
+        dest: /etc/systemd/system/prometheus.service
+        content: |
+          [Unit]
+          Description=Prometheus
+          After=network.target
+
+          [Service]
+          User=prometheus
+          ExecStart=/usr/local/bin/prometheus --config.file=/opt/prometheus/prometheus.yml
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Start Prometheus
+      become: true
+      systemd:
+        name: prometheus
+        enabled: yes
+        state: started
