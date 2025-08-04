@@ -67,4 +67,5 @@ jobs:
         key: id_rsa
         options: |
           --ssh-extra-args="-o StrictHostKeyChecking=no"
+          -i inventory.ini
       
