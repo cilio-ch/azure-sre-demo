@@ -16,20 +16,13 @@ jobs:
         python3 -m pip install --upgrade pip
         python3 -m pip install ansible
         python3 -m pip install \
+          azure-cli \
           azure-mgmt-resource \
           azure-mgmt-containerinstance \
           azure-identity \
           msrestazure
         ansible-galaxy collection install azure.azcollection
         echo -e "[defaults]\ncollections_path = ~/.ansible/collections:/usr/share/ansible/collections\nansible_python_interpreter = /usr/bin/python3" > ansible.cfg
-
-    - name: Verify Python & Ansible environment
-      run: |
-        which python3
-        python3 --version
-        ansible --version
-        pip list | grep azure
-
 
     - name: Run Ansible Playbook
       run: |
