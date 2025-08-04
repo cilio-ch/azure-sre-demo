@@ -14,9 +14,10 @@ jobs:
     - name: Install Ansible & Azure Collection
       run: |
         sudo apt update
-        sudo apt install -y ansible sshpass
+        sudo apt install -y python3-pip sshpass ansible
+        pip install 'ansible[azure]'   Azure SDK required for azure.azcollection
         ansible-galaxy collection install azure.azcollection
-         echo -e "[defaults]\ncollections_paths = ~/.ansible/collections:/usr/share/ansible/collections" > ansible.cfg
+        echo -e "[defaults]\ncollections_paths = ~/.ansible/collections:/usr/share/ansible/collections\nansible_python_interpreter = /usr/bin/python3" > ansible.cfg
 
     - name: Run Ansible Playbook
       run: |
