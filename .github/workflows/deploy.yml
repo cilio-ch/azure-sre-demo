@@ -47,8 +47,9 @@ jobs:
 
     - name: Generate inventory.ini
       run: |
-        echo "[azure_vm]" > inventory.ini
-        echo "${{ env.VM_IP }} ansible_user=${{ secrets.ADMIN_USERNAME }} ansible_ssh_private_key_file=./id_rsa ansible_python_interpreter=/usr/bin/python3" >> inventory.ini
+       echo "[azure_vm]" > inventory.ini
+       echo "${{ env.VM_IP }} ansible_user=cilio-ch ansible_ssh_private_key_file=./id_rsa ansible_python_interpreter=/usr/bin/python3" >> inventory.ini
+
 
     - name: Show inventory.ini (debug)
       run: cat inventory.ini
