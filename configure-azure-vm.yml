@@ -48,3 +48,28 @@
         enabled: yes
         state: started
 
+    - name: Install Fluent Bit
+      become: true
+      shell: |
+        curl https://packages.fluentbit.io/install.sh | sh
+
+    - name: Configure Fluent Bit to log syslog locally
+      become: true
+      copy:
+        dest: /etc/fluent-bit/fluent-bit.conf
+        content: |
+          [SERVICE]
+            Flush        5
+            Daemon       Off
+            Log_Level    info
+
+          [INPUT]
+            Name         systemd
+            Tag          host.*
+            Systemd_Filter _SYSTEMD_UNIT=sshd.service
+
+          [OUTPUT]
+            Name         stdout
+            Match        *
+
+

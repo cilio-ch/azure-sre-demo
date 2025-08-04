@@ -23,7 +23,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
-    - name: 🔍 Print ENV for debug
+    - name:  Print ENV for debug
       run: |
         env | grep ARM_
         echo "SSH pub: ${SSH_PUBLIC_KEY:0:30}"
