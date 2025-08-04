@@ -100,10 +100,3 @@ This lab demonstrates an end-to-end automated deployment of a monitoring-ready L
 * Secrets are injected via GitHub Actions environment variables
 * VM uses SSH public key authentication for provisioning
 
----
-
-##  Next Steps
-
-* Add Prometheus alerts and Grafana dashboards
-* Forward Fluent Bit logs to OpenSearch or Loki
-* Restrict NSG rules or integrate Azure Bastion for SSH access
