@@ -11,17 +11,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Ansible
+    - name: Install Ansible & Azure Collection
       run: |
         sudo apt update
         sudo apt install -y ansible sshpass
+        ansible-galaxy collection install azure.azcollection
+        echo "collections_paths = ~/.ansible/collections:/usr/share/ansible/collections" > ansible.cfg
 
-    - name: Install Azure Ansible Collection
+    - name: Run Ansible Playbook
       run: |
-        mkdir -p ~/.ansible/collections
-        ansible-galaxy collection install azure.azcollection -p ~/.ansible/collections
+        ansible-playbook ansible/playbooks/deploy-monitoring.yml
       env:
-        ANSIBLE_COLLECTIONS_PATHS: ~/.ansible/collections
+        ANSIBLE_HOST_KEY_CHECKING: "False"
 
 
     - name: Run Ansible Playbook
