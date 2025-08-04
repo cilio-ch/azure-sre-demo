@@ -42,34 +42,56 @@ This lab demonstrates an end-to-end automated deployment of a monitoring-ready L
 
 ##  Azure VM Architecture
 
-```text
-┌───────────────────────────────┐
-│     Azure Linux VM (Ubuntu)   │
-│                               │
-│  ┌───────────┬──────────────┐ │
-│  │ Docker    │ Prometheus   │ │
-│  │ (NGINX)   │ Port 9090    │ │
-│  │ Port 80   └──────────────┘ │
-│  │                         ▲ │
-│  └─────────────┬──────────┘ │
-│                ▼            │
-│     Node Exporter (9100)    │
-│     Fluent Bit (journald)   │
-│     Grafana (Port 3000)     │
-└──────────────────────────────┘
-```
+                            ┌────────────────────────┐
+                            │    GitHub Actions CI   │
+                            │  (Terraform + Ansible) │
+                            └────────────┬───────────┘
+                                         │
+                                         ▼
+                      ┌──────────────────────────────┐
+                      │  Terraform Infrastructure     │
+                      │ (Remote backend in Azure Blob)│
+                      └────────────┬──────────────────┘
+                                   │
+        ┌──────────────────────────┴────────────────────────────┐
+        │                      Azure Resources                   │
+        │                                                       │
+        │  ┌──────────────────────────────┐                      │
+        │  │ azurerm_resource_group       │                      │
+        │  ├──────────────────────────────┤                      │
+        │  │ azurerm_virtual_network      │                      │
+        │  │ └─ azurerm_subnet            │                      │
+        │  │ └─ azurerm_nsg (rules: SSH, HTTP, 9100, 9090, 3000)│
+        │  └────────────┬─────────────────┘                      │
+        │               ▼                                        │
+        │     ┌────────────────────────────────┐                 │
+        │     │ azurerm_linux_virtual_machine │                 │
+        │     │      ubuntu 20.04 LTS         │                 │
+        │     └────────────┬──────────────────┘                 │
+        │                  ▼                                     │
+        └────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+              ┌────────────────────────────┐
+              │      Ansible Playbook      │
+              └────────────┬───────────────┘
+                           ▼
+      ┌────────────────────────────────────────────────────┐
+      │             Inside the Azure VM                    │
+      │                                                    │
+      │  ┌──────────────┬─────────────┬──────────────────┐ │
+      │  │  Docker      │  Prometheus │    Grafana       │ │
+      │  │ (NGINX)      │  Port 9090  │    Port 3000     │ │
+      │  │  Port 80     │ Scrapes     │    Visualizes    │ │
+      │  └──────────────┘ node_exporter└────────┬─────────┘ │
+      │                                         ▼           │
+      │         ┌──────────────────────────────┐            │
+      │         │     Node Exporter            │            │
+      │         │   Port 9100 (System metrics) │            │
+      │         └──────────────────────────────┘            │
+      │                                                    │
+      └────────────────────────────────────────────────────┘
 
----
-
-##  Access Summary
-
-| Component     | URL / Port                  |
-| ------------- | --------------------------- |
-| VM SSH        | Port 22                     |
-| NGINX         | http\://\<VM\_IP>:80        |
-| Prometheus    | http\://\<VM\_IP>:9090      |
-| Grafana       | http\://\<VM\_IP>:3000      |
-| Node Exporter | Scraped internally on :9100 |
 
 ---
 
