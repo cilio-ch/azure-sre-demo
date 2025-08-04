@@ -26,6 +26,5 @@ jobs:
 
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook ansible/playbooks/deploy-monitoring.yml -i ansible/hosts
-      env:
+        ansible-playbook ansible/playbooks/deploy-monitoring.yml
         ANSIBLE_HOST_KEY_CHECKING: "False"
