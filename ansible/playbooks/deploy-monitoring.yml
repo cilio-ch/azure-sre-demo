@@ -1,6 +1,7 @@
 ---
 - name: Deploy Prometheus and Grafana on Azure
-  hosts: azure_vm
+  hosts: localhost
+  connection: local
   vars:
     prometheus_container:
       name: prometheus
