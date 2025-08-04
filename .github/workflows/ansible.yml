@@ -18,7 +18,10 @@ jobs:
 
     - name: Install Azure Ansible Collection
       run: |
-        ansible-galaxy collection install azure.azcollection
+        mkdir -p ~/.ansible/collections
+        ansible-galaxy collection install azure.azcollection -p ~/.ansible/collections
+      env:
+        ANSIBLE_COLLECTIONS_PATHS: ~/.ansible/collections
 
 
     - name: Run Ansible Playbook
