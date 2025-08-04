@@ -16,16 +16,10 @@ jobs:
         sudo apt update
         sudo apt install -y ansible sshpass
         ansible-galaxy collection install azure.azcollection
-        echo "collections_paths = ~/.ansible/collections:/usr/share/ansible/collections" > ansible.cfg
+         echo -e "[defaults]\ncollections_paths = ~/.ansible/collections:/usr/share/ansible/collections" > ansible.cfg
 
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook ansible/playbooks/deploy-monitoring.yml
+        ANSIBLE_CONFIG=ansible.cfg ansible-playbook ansible/playbooks/deploy-monitoring.yml
       env:
-        ANSIBLE_HOST_KEY_CHECKING: "False"
-
-
-    - name: Run Ansible Playbook
-      run: |
-        ansible-playbook ansible/playbooks/deploy-monitoring.yml
         ANSIBLE_HOST_KEY_CHECKING: "False"
