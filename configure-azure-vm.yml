@@ -48,29 +48,53 @@
         enabled: yes
         state: started
 
+    - name: Add Fluent Bit APT key
+      become: true
+      apt_key:
+       url: https://packages.fluentbit.io/fluentbit.key
+       state: present
+
+    - name: Add Fluent Bit APT repository
+      become: true
+      apt_repository:
+       repo: "deb https://packages.fluentbit.io/ubuntu/focal focal main"
+       state: present
+       filename: fluentbit
+
     - name: Install Fluent Bit
       become: true
-      shell: |
-        curl https://packages.fluentbit.io/install.sh | sh
+      apt:
+        name: td-agent-bit
+        state: present
+        update_cache: yes
 
-    - name: Configure Fluent Bit to log syslog locally
+    - name: Ensure Fluent Bit is started
+      become: true
+      systemd:
+        name: td-agent-bit
+        enabled: yes
+        state: started
+
+
+    - name: Configure Fluent Bit
       become: true
       copy:
-        dest: /etc/fluent-bit/fluent-bit.conf
-        content: |
-          [SERVICE]
-            Flush        5
-            Daemon       Off
-            Log_Level    info
+       dest: /etc/td-agent-bit/td-agent-bit.conf
+       content: |
+        
+         [SERVICE]
+             Flush        5
+             Log_Level    info
 
-          [INPUT]
-            Name         systemd
-            Tag          host.*
-            Systemd_Filter _SYSTEMD_UNIT=sshd.service
+         [INPUT]
+             Name         systemd
+             Tag          host.*
+             Systemd_Filter _SYSTEMD_UNIT=sshd.service
 
-          [OUTPUT]
-            Name         stdout
-            Match        *
+         [OUTPUT]
+             Name         stdout
+             Match        *
+
 
     - name: Run NGINX container
       become: true
