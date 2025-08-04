@@ -40,9 +40,9 @@ jobs:
         -var "ssh_public_key=${SSH_PUBLIC_KEY}"
 
     - name: Save Terraform output
-        id: tf_output
-        run: |
-          echo "VM_IP=$(terraform output -raw vm_public_ip)" >> $GITHUB_ENV
+      id: tf_output
+      run: |
+        echo "VM_IP=$(terraform output -raw vm_public_ip)" >> $GITHUB_ENV
 
     - name: Generate inventory.ini
       run: |
