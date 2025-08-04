@@ -105,5 +105,3 @@
           - "80:80"
         state: started
         restart_policy: always
-
-
