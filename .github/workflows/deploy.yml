@@ -1,4 +1,4 @@
-name: Terraform Deploy
+name: Terraform + Ansible  Deploy
 
 on:
   workflow_dispatch:
@@ -38,4 +38,28 @@ jobs:
         terraform apply -auto-approve \
         -var-file="terraform.tfvars" \
         -var "ssh_public_key=${SSH_PUBLIC_KEY}"
+
+    - name: Save Terraform output
+        id: tf_output
+        run: |
+          echo "VM_IP=$(terraform output -raw vm_public_ip)" >> $GITHUB_ENV
+
+    - name: Generate inventory.ini
+      run: |
+        echo "[azure_vm]" > inventory.ini
+        echo "$VM_IP ansible_user=${{ secrets.ADMIN_USERNAME }} ansible_ssh_private_key_file=./id_rsa ansible_python_interpreter=/usr/bin/python3" >> inventory.ini
+
+    - name: Add SSH key
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > id_rsa
+        chmod 600 id_rsa
+
+    - name: Run Ansible Playbook
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        playbook: playbook.yml
+        inventory: inventory.ini
+        key: id_rsa
+        options: |
+          --ssh-extra-args="-o StrictHostKeyChecking=no"
       
