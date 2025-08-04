@@ -22,25 +22,28 @@
 
   tasks:
     - name: Create Prometheus container group
-      azure_rm_containerinstance:
-        resource_group: "azure-sre-lab-rg"
-        name: "{{ prometheus_container.name }}"
-        image: "{{ prometheus_container.image }}"
-        cpu: "{{ prometheus_container.cpu }}"
-        memory: "{{ prometheus_container.memory }}"
-        ports:
-          - "{{ prometheus_container.port }}"
-        os_type: Linux
-        location: "francecentral"
+      resource_group: "azure-sre-lab-rg"
+      name: "prometheus-group"
+      location: "francecentral"
+      os_type: Linux
+      containers:
+        - name: prometheus
+          image: prom/prometheus
+          cpu: 1
+          memory: 1.5
+          ports:
+            - 9090
 
     - name: Create Grafana container group
-      azure_rm_containerinstance:
+      azure.azcollection.azure_container_instance:
         resource_group: "azure-sre-lab-rg"
-        name: "{{ grafana_container.name }}"
-        image: "{{ grafana_container.image }}"
-        cpu: "{{ grafana_container.cpu }}"
-        memory: "{{ grafana_container.memory }}"
-        ports:
-          - "{{ grafana_container.port }}"
-        os_type: Linux
+        name: "grafana-group"
         location: "francecentral"
+        os_type: Linux
+        containers:
+          - name: grafana
+            image: grafana/grafana
+            cpu: 1
+            memory: 1.5
+            ports:
+              - 3000
