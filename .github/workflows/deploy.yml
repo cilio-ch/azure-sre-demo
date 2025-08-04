@@ -58,7 +58,7 @@ jobs:
     - name: Run Ansible Playbook
       uses: dawidd6/action-ansible-playbook@v2
       with:
-        playbook: playbook.yml
+        playbook: configure-azure-vm.yml
         inventory: inventory.ini
         key: id_rsa
         options: |
