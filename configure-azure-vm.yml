@@ -72,4 +72,14 @@
             Name         stdout
             Match        *
 
+    - name: Run NGINX container
+      become: true
+      docker_container:
+        name: nginx
+        image: nginx:latest
+        ports:
+          - "80:80"
+      state: started
+      restart_policy: always
+
 
