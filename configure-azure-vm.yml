@@ -106,102 +106,102 @@
         state: started
         restart_policy: always
 
-- name: Create Prometheus user
-  become: true
-  user:
-    name: prometheus
-    system: yes
-    shell: /sbin/nologin
+    - name: Create Prometheus user
+      become: true
+      user:
+        name: prometheus
+        system: yes
+        shell: /sbin/nologin
 
-- name: Download and extract Prometheus
-  become: true
-  shell: |
-    cd /tmp
-    curl -LO https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
-    tar -xzf prometheus-2.52.0.linux-amd64.tar.gz
-    mv prometheus-2.52.0.linux-amd64 /opt/prometheus
-  args:
-    creates: /opt/prometheus/prometheus
+    - name: Download and extract Prometheus
+      become: true
+      shell: |
+        cd /tmp
+        curl -LO https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+        tar -xzf prometheus-2.52.0.linux-amd64.tar.gz
+        mv prometheus-2.52.0.linux-amd64 /opt/prometheus
+      args:
+        creates: /opt/prometheus/prometheus
 
-- name: Configure Prometheus (prometheus.yml)
-  become: true
-  copy:
-    dest: /opt/prometheus/prometheus.yml
-    content: |
-      global:
-        scrape_interval: 15s
+    - name: Configure Prometheus (prometheus.yml)
+      become: true
+      copy:
+        dest: /opt/prometheus/prometheus.yml
+        content: |
+          global:
+            scrape_interval: 15s
 
-      scrape_configs:
-        - job_name: 'node_exporter'
-          static_configs:
-            - targets: ['localhost:9100']
+          scrape_configs:
+            - job_name: 'node_exporter'
+              static_configs:
+                - targets: ['localhost:9100']
 
-- name: Create symlink for prometheus
-  become: true
-  file:
-    src: /opt/prometheus/prometheus
-    dest: /usr/local/bin/prometheus
-    state: link
+    - name: Create symlink for prometheus
+      become: true
+      file:
+        src: /opt/prometheus/prometheus
+        dest: /usr/local/bin/prometheus
+        state: link
 
-- name: Create symlink for promtool
-  become: true
-  file:
-    src: /opt/prometheus/promtool
-    dest: /usr/local/bin/promtool
-    state: link
+    - name: Create symlink for promtool
+      become: true
+      file:
+        src: /opt/prometheus/promtool
+        dest: /usr/local/bin/promtool
+        state: link
 
-- name: Create Prometheus systemd service
-  become: true
-  copy:
-    dest: /etc/systemd/system/prometheus.service
-    content: |
-      [Unit]
-      Description=Prometheus Monitoring
-      After=network.target
+    - name: Create Prometheus systemd service
+      become: true
+      copy:
+        dest: /etc/systemd/system/prometheus.service
+        content: |
+          [Unit]
+          Description=Prometheus Monitoring
+          After=network.target
 
-      [Service]
-      User=prometheus
-      ExecStart=/usr/local/bin/prometheus \
-        --config.file=/opt/prometheus/prometheus.yml \
-        --storage.tsdb.path=/opt/prometheus/data \
-        --web.listen-address=":9090"
-      Restart=always
+          [Service]
+          User=prometheus
+          ExecStart=/usr/local/bin/prometheus \
+            --config.file=/opt/prometheus/prometheus.yml \
+            --storage.tsdb.path=/opt/prometheus/data \
+            --web.listen-address=":9090"
+          Restart=always
 
-      [Install]
-      WantedBy=multi-user.target
+          [Install]
+          WantedBy=multi-user.target
 
-- name: Start Prometheus service
-  become: true
-  systemd:
-    name: prometheus
-    enabled: yes
-    state: started
+    - name: Start Prometheus service
+      become: true
+      systemd:
+        name: prometheus
+        enabled: yes
+        state: started
 
 
-- name: Add Grafana APT repo key
-  become: true
-  apt_key:
-    url: https://packages.grafana.com/gpg.key
-    state: present
+    - name: Add Grafana APT repo key
+      become: true
+      apt_key:
+        url: https://packages.grafana.com/gpg.key
+        state: present
 
-- name: Add Grafana repository
-  become: true
-  apt_repository:
-    repo: deb https://packages.grafana.com/oss/deb stable main
-    state: present
-    filename: grafana
-    update_cache: yes
+    - name: Add Grafana repository
+      become: true
+      apt_repository:
+        repo: deb https://packages.grafana.com/oss/deb stable main
+        state: present
+        filename: grafana
+        update_cache: yes
 
-- name: Install Grafana
-  become: true
-  apt:
-    name: grafana
-    state: present
-    update_cache: yes
+    - name: Install Grafana
+      become: true
+      apt:
+        name: grafana
+        state: present
+        update_cache: yes
 
-- name: Start and enable Grafana service
-  become: true
-  systemd:
-    name: grafana-server
-    enabled: yes
-    state: started
+    - name: Start and enable Grafana service
+      become: true
+      systemd:
+        name: grafana-server
+        enabled: yes
+        state: started
