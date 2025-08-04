@@ -42,7 +42,7 @@ jobs:
     - name: Save Terraform output
       id: tf_output
       run: |
-        echo "VM_IP=$(terraform output -raw vm_public_ip)" >> $GITHUB_ENV
+        echo "VM_IP=$(terraform output -raw public_ip)" >> $GITHUB_ENV
 
     - name: Generate inventory.ini
       run: |
