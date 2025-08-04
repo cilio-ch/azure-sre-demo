@@ -79,7 +79,7 @@
         image: nginx:latest
         ports:
           - "80:80"
-      state: started
-      restart_policy: always
+        state: started
+        restart_policy: always
 
 
