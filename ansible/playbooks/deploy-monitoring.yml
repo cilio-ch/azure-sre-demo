@@ -22,7 +22,7 @@
 
   tasks:
     - name: Create Prometheus container group
-      azure.azcollection.azure_container_instance:
+      azure_rm_containerinstance:
         name: prometheus-group
         resource_group: azure-sre-lab-rg
         location: francecentral
@@ -36,7 +36,7 @@
               - "{{ prometheus_container.port }}"
 
     - name: Create Grafana container group
-      azure.azcollection.azure_container_instance:
+      azure_rm_containerinstance:
         name: grafana-group
         resource_group: azure-sre-lab-rg
         location: francecentral
