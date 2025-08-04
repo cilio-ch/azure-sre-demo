@@ -15,7 +15,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y python3-pip sshpass ansible
-        pip install 'ansible[azure]'   Azure SDK required for azure.azcollection
+        pip install azure-mgmt-resource azure-mgmt-containerinstance azure-identity msrestazure
         ansible-galaxy collection install azure.azcollection
         echo -e "[defaults]\ncollections_paths = ~/.ansible/collections:/usr/share/ansible/collections\nansible_python_interpreter = /usr/bin/python3" > ansible.cfg
 
