@@ -4,7 +4,7 @@ This lab demonstrates an end-to-end automated deployment of a monitoring-ready L
 
 ---
 
-## 🚀 Deployment Pipeline
+##  Deployment Pipeline
 
 ### 1. **GitHub Actions Workflows**
 
@@ -40,7 +40,7 @@ This lab demonstrates an end-to-end automated deployment of a monitoring-ready L
 
 ---
 
-## 📦 Azure VM Architecture
+##  Azure VM Architecture
 
 ```text
 ┌───────────────────────────────┐
