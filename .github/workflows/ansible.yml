@@ -26,6 +26,7 @@ jobs:
           azure-storage-blob \
           azure-mgmt-automation \
           azure-mgmt-notificationhubs \
+          azure.mgmt.datafactory \
           msrestazure
         ansible-galaxy collection install azure.azcollection
         echo -e "[defaults]\ncollections_path = ~/.ansible/collections:/usr/share/ansible/collections\nansible_python_interpreter = /usr/bin/python3" > ansible.cfg
