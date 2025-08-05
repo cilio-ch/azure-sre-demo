@@ -1,8 +1,8 @@
 provider "azurerm" {
   features {}
 
-  subscription_id = "d77ac42c-5dd1-4dfd-8bbe-fd6a9a310341"
-  tenant_id       = "6c0277d1-6600-48fb-9e51-d015fdcd95d9"
+  subscription_id = "var.subscription_id"
+  tenant_id       = "var.tenant_id"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -145,4 +145,5 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   tags = var.tags
+
 }
