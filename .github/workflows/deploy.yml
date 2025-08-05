@@ -38,6 +38,8 @@ jobs:
         terraform apply -auto-approve \
         -var-file="terraform.tfvars" \
         -var "ssh_public_key=${SSH_PUBLIC_KEY}"
+        -var "subscription_id=${ARM_SUBSCRIPTION_ID}" \
+        -var "tenant_id=${ARM_TENANT_ID}"
 
     - name: Save Terraform output
       id: tf_output
