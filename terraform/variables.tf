@@ -1,3 +1,13 @@
+variable "subscription_id" {
+  description = "Azure subscription ID"
+  type        = string
+}
+
+variable "tenant_id" {
+  description = "Azure tenant ID"
+  type        = string
+}
+
 variable "location" {
   description = "Azure region"
   type        = string
@@ -58,4 +68,5 @@ variable "ssh_public_key" {
 variable "tags" {
   description = "Tags to apply to all resources"
   type        = map(string)
+
 }
